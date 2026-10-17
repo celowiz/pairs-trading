@@ -1,0 +1,9 @@
+.venv/
+prices.pkl
+shot.py
+data/
+_site/
+build.log
+__pycache__/
+.pytest_cache/
+shots/

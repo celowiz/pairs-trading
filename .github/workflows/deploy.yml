@@ -1,0 +1,49 @@
+name: Dados + Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "30 22 * * 1-5"   # 19:30 BRT, após o fechamento da B3 e de NY (só fechamentos)
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Testes
+        run: python -m pytest -q tests
+      - name: Baixar fechamentos
+        run: python scripts/fetch.py prices.pkl
+      - name: Calcular pares
+        run: mkdir -p _site/data && python scripts/build.py prices.pkl _site/data
+      - name: Montar site
+        run: |
+          cp -r index.html css js favicon.svg favicon-32.png favicon.ico apple-touch-icon.png og.png _site/
+          touch _site/.nojekyll
+          ls -la _site _site/data | head -20
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

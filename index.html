@@ -1,0 +1,71 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pairs Trading · valor relativo entre ativos — Marcelo Wizenberg</title>
+<meta name="description" content="Ferramenta educacional: pares de ativos cointegrados com correção para falsos positivos, estabilidade e backtest fora da amostra.">
+<meta property="og:type" content="website"><meta property="og:title" content="Pairs Trading · valor relativo entre ativos — Marcelo Wizenberg">
+<meta property="og:description" content="Pares cointegrados com correção para falsos positivos (FDR), estabilidade no tempo e backtest fora da amostra. Ferramenta educacional.">
+<meta property="og:url" content="https://celowiz.github.io/pairs-trading/"><meta property="og:image" content="https://celowiz.github.io/pairs-trading/og.png">
+<meta name="twitter:card" content="summary_large_image"><link rel="canonical" href="https://celowiz.github.io/pairs-trading/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="icon" href="favicon-32.png" sizes="32x32"><link rel="alternate icon" href="favicon.ico"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="stylesheet" href="css/style.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QCBFGR39WG"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-QCBFGR39WG',{content_group:'pairs_trading'});</script>
+</head><body>
+<nav><a class="logo" href="https://celowiz.github.io/"><span class="mw">M<b>W</b></span>Marcelo Wizenberg</a><div><span class="l"><a href="https://celowiz.github.io/" data-i18n="nav_proj">Projetos</a><a class="on" href="#">Pairs Trading</a></span><button class="lng" id="lng">EN</button></div></nav>
+<header class="hero"><div class="eyebrow" data-i18n="eyebrow">Projeto · Valor relativo entre ativos</div>
+<h1 data-i18n="h1">Pares que andam juntos — de verdade</h1>
+<p class="lead" data-i18n="lead">Pairs trading aposta que a distância entre dois ativos ligados volta ao normal. O difícil é separar pares <em>cointegrados</em> de pares que só pareceram juntos por acaso. Aqui cada par passa por testes contra a <em>correlação espúria</em>, correção para múltiplos testes, estabilidade no tempo e um backtest fora da amostra. Ferramenta educacional — não é recomendação de investimento.</p></header>
+<main>
+ <section class="card" id="band"><div class="ch"><h3 data-i18n="t_band">Robustos e candidatos</h3><span class="ill" id="bandNote"></span></div>
+  <p class="note" data-i18n="band_n">Robustos passam nos quatro testes. Candidatos têm nota A, B ou C mas falham em pelo menos um — o motivo aparece em cada cartão. Nenhum deles é recomendação: são exemplos para estudar.</p>
+  <div class="ill" data-i18n="b_rob">ROBUSTOS</div><div class="bcards" id="bRob"></div>
+  <div class="ill" style="margin-top:18px" data-i18n="b_cand">CANDIDATOS</div><div class="bcards" id="bCand"></div>
+  <div id="bExpW" hidden><div class="ill" style="margin-top:18px" data-i18n="b_exp">SEM VÍNCULO · EXPLORATÓRIO (PASSAM NO FDR)</div><div class="bcards" id="bExp"></div></div>
+ </section>
+ <section class="card"><div class="ch"><h3 data-i18n="t_rank">Ranking de pares</h3><span class="ill" id="asof"></span></div>
+  <div class="filters">
+   <div class="grp"><span class="ill" data-i18n="f_class">CLASSE</span><select id="fCls"></select></div>
+   <div class="grp"><span class="ill" data-i18n="f_group">GRUPO</span><select id="fGrp"></select></div>
+   <input type="search" id="fQ" data-i18n-ph="f_search" placeholder="Buscar ativo">
+   <div class="grp"><span class="ill" data-i18n="f_tier">FAIXA</span><select id="fTier"></select></div>
+   <label class="tg"><input type="checkbox" id="fSig"><span data-i18n="f_sig">só spread esticado (|z| ≥ 2)</span></label>
+  </div>
+  <div class="econ"><label class="sw"><input type="checkbox" id="fEcon"><i></i><span data-i18n="f_econ">Incluir pares sem vínculo econômico</span></label><span class="ill" id="econLoad"></span></div>
+  <p class="note" id="econNote"></p>
+  <div class="tw"><table id="tbl"></table></div><div class="more"><button class="btn" id="more"></button></div>
+  <p class="note" data-i18n="legend_chk">Os 4 quadradinhos do selo: FDR · meia‑vida 2–60 dias · estabilidade ≥ 60% · sem quebra de hedge ratio. “Robusto” = os quatro.</p>
+ </section>
+ <section class="card" id="det">
+  <div class="ch"><div><div class="eyebrow" id="dGrp"></div><h3 id="dTitle" style="font-size:28px;margin-top:6px"></h3></div><span id="dGrade"></span></div>
+  <div id="dTag"></div>
+  <div class="tiles" id="dTiles"></div><p class="why" id="dWhy"></p><div class="reasons" id="dReasons"></div>
+  <p class="note" id="dSlim" hidden></p><div id="dCharts">
+  <div class="ch sub"><h3 data-i18n="c_px">Preços normalizados</h3><span class="ill" data-i18n="c_px_n">base 1 no início · últimos ~4 anos</span></div><div class="legend" id="lgA"></div><div class="cv"><canvas id="cA"></canvas><div class="tip" hidden></div></div>
+  <div class="ch sub"><h3 data-i18n="c_z">Spread em z‑score</h3><span class="ill" data-i18n="c_z_n">só dados passados · bandas ±2 (entrada) e ±0,5 (saída)</span></div><div class="legend" id="lgZ"></div><div class="cv"><canvas id="cZ"></canvas><div class="tip" hidden></div></div>
+  <div class="two">
+   <div><div class="ch sub"><h3 data-i18n="c_b">Hedge ratio móvel</h3><span class="ill">OLS 252d</span></div><div class="cv"><canvas id="cB"></canvas><div class="tip" hidden></div></div></div>
+   <div><div class="ch sub"><h3 data-i18n="c_p">p‑valor de cointegração móvel</h3><span class="ill" data-i18n="c_p_n">janelas de 252d · linha = 5%</span></div><div class="cv"><canvas id="cP"></canvas><div class="tip" hidden></div></div></div>
+  </div>
+  <div class="ch sub"><h3 data-i18n="c_e">Backtest fora da amostra</h3><span class="ill" id="eNote"></span></div><div class="cv"><canvas id="cE"></canvas><div class="tip" hidden></div></div>
+  <div class="tiles" id="eTiles"></div></div>
+ </section>
+ <section class="card"><h3 data-i18n="t_cmp">Quantos pares cada método aceita</h3>
+  <p class="note" data-i18n="cmp_n">O método antigo testava todas as combinações de ~120 ativos, com 1 ano de dados e p‑valor de 5% sem correção. Com milhares de testes, o acaso sozinho aprova dezenas de pares. O método novo começa só com pares que têm vínculo econômico e corrige os p‑valores para múltiplos testes.</p>
+  <div class="two"><div><div class="ill" data-i18n="old">MÉTODO ANTIGO</div><div class="fun" id="funOld"></div></div><div><div class="ill" data-i18n="new">MÉTODO NOVO</div><div class="fun" id="funNew"></div></div></div>
+  <div id="funEconW"><div class="ill" style="margin-top:20px" data-i18n="new_all">MÉTODO NOVO · INCLUINDO PARES SEM VÍNCULO (CHAVE LIGADA)</div><div class="fun" id="funEcon"></div><p class="why" id="econWhy"></p></div>
+  <p class="why" id="cmpWhy"></p>
+ </section>
+ <section class="card"><h3 data-i18n="t_sp">Correlação não é cointegração</h3>
+  <p class="note" id="spIntro"></p>
+  <div class="tiles" id="spTiles"></div>
+  <div class="two"><div><div class="ch sub"><h3 style="font-size:17px" data-i18n="sp_px">Preços (base 1)</h3></div><div class="legend" id="lgS"></div><div class="cv"><canvas id="cS1"></canvas><div class="tip" hidden></div></div></div>
+  <div><div class="ch sub"><h3 style="font-size:17px" data-i18n="sp_p">p‑valor em janelas de 1 ano</h3></div><div class="cv"><canvas id="cS2"></canvas><div class="tip" hidden></div></div></div></div>
+  <div class="ch sub"><h3 style="font-size:17px" data-i18n="rw_t">Faça o teste: dois passeios aleatórios independentes</h3><button class="btn" id="rwBtn" data-i18n="rw_b">Gerar outro par</button></div>
+  <p class="note" data-i18n="rw_n">Duas séries sem nenhuma ligação, cada uma com uma leve tendência. Clique várias vezes e veja como a correlação dos preços costuma ser alta, enquanto a dos retornos fica perto de zero.</p>
+  <div class="cv"><canvas id="cRW"></canvas></div><p class="why" id="rwOut"></p>
+ </section>
+ <div class="two">
+  <section class="card txt"><h3 data-i18n="t_how">Como funciona</h3><div id="how"></div></section>
+  <section class="card txt"><h3 data-i18n="t_lim">Limites — leia antes de usar</h3><div id="lim"></div></section>
+ </div>
+ <p class="disc" data-i18n="disc">Conteúdo educacional. Não constitui recomendação de compra ou venda de ativos. Resultados passados não garantem resultados futuros.</p>
+</main>
+<script src="js/app.js"></script></body></html>

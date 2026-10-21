@@ -31,6 +31,9 @@ jobs:
         run: python scripts/fetch.py prices.pkl
       - name: Calcular pares
         run: mkdir -p _site/data && python scripts/build.py prices.pkl _site/data
+      # Resumo pequeno (data/summary.json) lido pela página Mercado Hoje do portfólio
+      - name: Resumo para o portfólio
+        run: python scripts/summary.py _site/data
       - name: Montar site
         run: |
           cp -r index.html css js favicon.svg favicon-32.png favicon.ico apple-touch-icon.png og.png _site/

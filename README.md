@@ -7,4 +7,4 @@ Favicon: opção A (design/favicons/pairs-trading/option_A.svg) + favicon-32.png
 
 Resumo: `scripts/summary.py` grava `data/summary.json` (~3 KB: funil, pares robustos com z-score atual e candidatos mais afastados), lido pela página [Mercado Hoje](https://celowiz.github.io/mercado-hoje/) do portfólio.
 
-Dados: `data/` não é versionado; o workflow `.github/workflows/deploy.yml` baixa os fechamentos e gera os JSON a cada push, manualmente e de segunda a sexta às 19:30 (Brasília).
+Dados: `data/` não é versionado; o workflow `.github/workflows/deploy.yml` baixa os fechamentos e gera os JSON a cada push, manualmente e de segunda a sexta às 19:17 (Brasília), com um cron reserva às 21:17 que só refaz o build se o principal ainda não tiver publicado. O download do Yahoo tem novas tentativas com espera crescente, e datas posteriores a hoje (Brasília) são descartadas.

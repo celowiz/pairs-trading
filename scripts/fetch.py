@@ -10,7 +10,9 @@ def download(t):
 
 def closes_only(df,now):
     """Só fechamentos: tira datas futuras no fuso de Brasília (o Yahoo data câmbio e futuros pela sessão
-    asiática, já com o dia seguinte depois das 21h BRT) e o dia de hoje antes das 18:30 BRT."""
+    asiática, já com o dia seguinte depois das 21h BRT), o dia de hoje antes das 18:30 BRT e sábados/domingos
+    (nenhum mercado do universo fecha no fim de semana; o Yahoo às vezes devolve uma linha de câmbio datada de sábado)."""
+    df=df[df.index.dayofweek<5]
     df=df[df.index.date<=now.date()]
     if (now.hour,now.minute)<(18,30): df=df[df.index.date<now.date()]
     return df

@@ -44,7 +44,7 @@ function chart(cv,o){const dpr=devicePixelRatio||1,W=cv.clientWidth,H=cv.clientH
  o.s.forEach(s=>s.v.forEach(v=>{if(v!=null&&isFinite(v)){lo=Math.min(lo,v);hi=Math.max(hi,v)}}));(o.h||[]).forEach(h=>{lo=Math.min(lo,h.y);hi=Math.max(hi,h.y)});
  if(o.lo!=null)lo=o.lo;if(o.hi!=null)hi=o.hi;const pad=(hi-lo)*.06||1;lo-=o.lo!=null?0:pad;hi+=o.hi!=null?0:pad;
  const X=i=>pl+(W-pl-pr)*i/Math.max(1,n-1),Y=v=>pt+(H-pt-pb)*(1-(v-lo)/(hi-lo));
- g.font='10px ui-monospace,Menlo,monospace';g.fillStyle='#71717a';g.strokeStyle='#1c1c1f';g.lineWidth=1;
+ g.font='10px ui-monospace,Menlo,monospace';g.fillStyle='#8a8a93';g.strokeStyle='#1c1c1f';g.lineWidth=1;
  for(let k=0;k<=4;k++){const v=lo+(hi-lo)*k/4,y=Y(v);g.beginPath();g.moveTo(pl,y);g.lineTo(W-pr,y);g.stroke();g.fillText(o.fmt?o.fmt(v):num(v,(hi-lo)<.08?3:(hi-lo)<2?2:1),2,y+3)}
  if(o.dates){const step=Math.ceil(n/(W<500?4:7));for(let i=0;i<n;i+=step){g.fillText(o.dates[i].slice(0,7),X(i)-18,H-5)}}
  if(o.shadeFrom!=null){g.fillStyle='rgba(45,212,191,.05)';g.fillRect(X(o.shadeFrom),pt,W-pr-X(o.shadeFrom),H-pt-pb)}

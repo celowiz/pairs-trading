@@ -27,7 +27,7 @@ Exemplo real do funil (dados até 23/10/2026, `data/meta.json`): 126 ativos → 
 
 ## Dados
 - **Fonte**: Yahoo Finance (`yfinance`), fechamentos diários de ações BR e EUA, ETFs, futuros de juros e commodities e o câmbio USD/BRL (para pares ADR × ação local em R$).
-- `data/` não é versionado: o workflow `.github/workflows/deploy.yml` baixa os fechamentos e gera os JSON a cada push, manualmente e de segunda a sexta às 19:17 (Brasília), com um cron reserva às 21:17 que só refaz o build se o principal ainda não tiver publicado. O download do Yahoo tem novas tentativas com espera crescente, e datas posteriores a hoje (Brasília) são descartadas.
+- `data/` não é versionado: o workflow `.github/workflows/deploy.yml` baixa os fechamentos e gera os JSON a cada push, manualmente e de segunda a sexta às 19:17 (Brasília), com crons reserva às 21:17 e às 08:27 do dia seguinte que só refazem o build se o site publicado ainda não tiver o último pregão (data dos dados, `as_of`). O download do Yahoo tem novas tentativas com espera crescente, e datas posteriores a hoje (Brasília) são descartadas.
 - Arquivos gerados: `pairs.json`, `meta.json`, `pair/*.json` e `unlinked.json` (carregado sob demanda: pares sem vínculo e o FDR recalculado sobre todos os testes).
 - `scripts/summary.py` grava `data/summary.json` (~3 KB: funil, pares robustos com z-score atual e candidatos mais afastados), lido pela página [Mercado Hoje](https://celowiz.github.io/mercado-hoje/) do portfólio.
 

@@ -69,3 +69,13 @@ def test_pairs_so_fechamentos():
     assert list(closes_only(df, dt.datetime(2026, 10, 20, 22, 10, tzinfo=BRT)).index.day) == [19, 20]
     # 15:00 BRT de 20/10: o dia corrente ainda é intradiário
     assert list(closes_only(df, dt.datetime(2026, 10, 20, 15, 0, tzinfo=BRT)).index.day) == [19]
+
+
+def test_pairs_sem_fim_de_semana():
+    import pandas as pd
+    from fetch import closes_only
+
+    BRT = dt.timezone(dt.timedelta(hours=-3))
+    df = pd.DataFrame({"a": [1.0, 2.0]}, index=pd.to_datetime(["2026-10-23", "2026-10-24"]))
+    # caso real: build de sábado 24/10/2026 às 23:14 BRT publicou as_of 2026-10-24 por uma linha de câmbio de sábado
+    assert list(closes_only(df, dt.datetime(2026, 10, 24, 23, 14, tzinfo=BRT)).index.day) == [23]
